@@ -25,5 +25,8 @@ Supported make targets:
 
 - Add support for development dependencies installation
 
+## Contribution
+
+Any PRs are welcome.
 
 [virtual environment]: https://docs.python.org/3/tutorial/venv.html
