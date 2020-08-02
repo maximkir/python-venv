@@ -14,10 +14,11 @@ See the [virtual environment] documentation for information on how this works.
 Use this repository as a template for your project.
 
 Supported make targets:
-- `setup` - Setup your development environment and install dependencies from requirements.txt file
-- `pyenv` -  Sets up pyenv and a virtualenv for a project under the .venv directory
+
+- `setup` - Setup a development environment and install dependencies from `requirements.txt` file
+- `pyenv` -  Sets up pyenv and a virtualenv for a project under the `.venv` directory
 - `dependencies` - Installs/updates dependencies for the project
-- `clean` - Cleans any generated files
+- `clean` - Cleans up any generated files
 
 
 ## To Do
