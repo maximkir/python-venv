@@ -20,6 +20,7 @@ Supported make targets:
 - `setup` - Setup a development environment and install dependencies from `requirements.txt` file
 - `pyenv` -  Sets up pyenv and a virtualenv for a project under the `.venv` directory
 - `dependencies` - Installs/updates dependencies for the project
+- `test` - Install dependencies for the project tests
 - `clean` - Cleans up any generated files
 
 
