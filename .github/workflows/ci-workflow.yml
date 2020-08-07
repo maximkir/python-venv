@@ -21,4 +21,4 @@ jobs:
     - name: check python version
       run: |
         source activate.sh
-        python -c 'import platform; assert platform.python_version() == "${PYTHON_VERSION}"'
+        python -c "import platform; assert platform.python_version() == \"${PYTHON_VERSION}\""
