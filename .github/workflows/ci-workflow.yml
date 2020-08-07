@@ -25,4 +25,5 @@ jobs:
     - name: check test target
       run: |
         make test
+        source activate.sh
         pytest
