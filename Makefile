@@ -33,6 +33,7 @@ help:
           "    pyenv: Sets up pyenv and a virtualenv for this project\n"\
           "    dependencies: Installs dependencies for this project\n"\
           "    setup: Setup your development environment and install dependencies\n"\
+          "    test: Install test dependencies\n"\
           "    clean: Cleans any generated files"
 
 pyenv:
@@ -47,12 +48,17 @@ pyenv:
 	pip install --upgrade pip
 
 dependencies:
-	$(VENV_ACTIVATE); \
-	pip install -Ur requirements.txt
+	$(VENV_ACTIVATE); pip install -r requirements.txt
 
 
 setup: prerequisites pyenv dependencies
 
+test:
+	@test -x "requirements-test.txt" || $(VENV_ACTIVATE); pip install -r requirements-test.txt
+
 clean:
-	rm -rf ${VENV_DIR}
-	rm -f .python-version
+	@rm -rf ${VENV_DIR}
+	@rm -f .python-version
+	@rm -Rf *.egg .cache .coverage .tox build dist docs/build htmlcov
+	@find -depth -type d -name __pycache__ -exec rm -Rf {} \;
+	@find -type f -name '*.pyc' -delete
