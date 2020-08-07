@@ -28,13 +28,15 @@ Darwin:
 .DEFAULT: help
 
 help:
-	@echo "Please choose one of the following targets: \n"\
-          "    prerequisites: Installs prerequisites software\n"\
-          "    pyenv: Sets up pyenv and a virtualenv for this project\n"\
-          "    dependencies: Installs dependencies for this project\n"\
-          "    setup: Setup your development environment and install dependencies\n"\
-          "    test: Install test dependencies\n"\
-          "    clean: Cleans any generated files"
+	@echo "Please choose one of the following targets:"
+	@echo
+	@echo "    prerequisites: Installs prerequisites software"
+	@echo "    pyenv: Sets up pyenv and a virtualenv for this project"
+	@echo "    dependencies: Installs dependencies for this project"
+	@echo "    setup: Setup your development environment and install dependencies"
+	@echo "    test: Install test dependencies"
+	@echo "    clean: Cleans any generated files"
+	@echo
 
 pyenv:
 	@echo "Creating virtual env, python version is: ${PYTHON_VERSION}"
@@ -54,7 +56,7 @@ dependencies:
 setup: prerequisites pyenv dependencies
 
 test:
-	@test -x "requirements-test.txt" || $(VENV_ACTIVATE); pip install -r requirements-test.txt
+	@test ! -f "requirements-test.txt" || ($(VENV_ACTIVATE); pip install -r requirements-test.txt)
 
 clean:
 	@rm -rf ${VENV_DIR}
