@@ -1,3 +1,5 @@
+![CI status](https://github.com/maximkir/python-venv-template/workflows/CI/badge.svg?branch=master)
+
 # Python Project Template
 
 Whenever I start a new Python project, I find myself spending time on virtual environment setup.
