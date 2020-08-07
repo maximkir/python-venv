@@ -22,3 +22,7 @@ jobs:
       run: |
         source activate.sh
         python -c "import platform; assert platform.python_version() == \"${PYTHON_VERSION}\""
+    - name: check test target
+      run: |
+        make test
+        pytest
