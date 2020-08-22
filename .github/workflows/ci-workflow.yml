@@ -27,3 +27,6 @@ jobs:
         make test
         source activate.sh
         pytest --version
+    - name: check clean target
+      run: |
+        make clean
