@@ -1,6 +1,14 @@
 
 OS = $(shell uname)
 
+
+define brew_install
+	if ! brew ls --versions "$(1)" >/dev/null; then \
+	    HOMEBREW_NO_AUTO_UPDATE=1 brew install "$(1)"; \
+	fi
+endef
+
+
 define brew_install_or_upgrade
 	if brew ls --versions "$(1)" >/dev/null; then \
 	    HOMEBREW_NO_AUTO_UPDATE=1 brew upgrade "$(1)"; \
@@ -18,10 +26,21 @@ VENV_DIR?=.venv
 VENV_ACTIVATE=. $(VENV_DIR)/bin/activate
 
 
+ifeq ($(OS),Darwin)
+	PYENV = \
+	LDFLAGS="-L$$(brew --prefix openssl)/lib" \
+	CPPFLAGS="-I$$(brew --prefix openssl)/include" \
+	pyenv
+else
+	PYENV = pyenv
+endif
+
+
 prerequisites: $(OS)
 
 Darwin:
 	brew update
+	$(call brew_install,openssl)
 	$(call brew_install_or_upgrade,pyenv)
 
 
@@ -38,9 +57,10 @@ help:
 	@echo "    clean: Cleans any generated files"
 	@echo
 
+
 pyenv:
 	@echo "Creating virtual env, python version is: ${PYTHON_VERSION}"
-	pyenv install --skip-existing ${PYTHON_VERSION}
+	$(PYENV) install --skip-existing ${PYTHON_VERSION}
 
 	@eval "$$(pyenv init -)"; \
 	pyenv local ${PYTHON_VERSION}; \
