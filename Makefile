@@ -82,5 +82,5 @@ clean:
 	@rm -rf ${VENV_DIR}
 	@rm -f .python-version
 	@rm -Rf *.egg .cache .coverage .tox build dist docs/build htmlcov
-	@find -depth -type d -name __pycache__ -exec rm -Rf {} \;
-	@find -type f -name '*.pyc' -delete
+	@find . -depth -type d -name __pycache__ -exec rm -Rf {} \;
+	@find . -type f -name '*.pyc' -delete
