@@ -5,7 +5,7 @@
 Whenever I start a new Python project, I find myself spending time on virtual environment setup.
 To increase productivity, I created a template used to create a Python project in a virtual environment.
 
-## Virual Environments
+## Virtual Environments
 
 A cooperatively isolated runtime environment that allows Python users and applications to install and upgrade Python distribution packages without interfering with the behaviour of other Python applications running on the same system.
 
