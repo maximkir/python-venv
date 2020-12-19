@@ -8,13 +8,14 @@ on:
 
 jobs:
   build:
-    runs-on: macos-latest
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        os: [macos-latest, ubuntu-latest]
+    env:
+      PYTHON_VERSION: 3.6.11
     steps:
     - uses: actions/checkout@v2
-
-    - name: set environment variables
-      run: |
-        echo ::set-env name=PYTHON_VERSION::3.6.11
     - name: setup virtual environment
       run: |
         make setup
