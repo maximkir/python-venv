@@ -1,4 +1,19 @@
-SHELL:=/bin/bash
+# This Makefile can be configured via following variables:
+#   PY
+#       Command name for system Python interpreter. It is used only initialy to
+#       create the virtual environment
+#       Default: python3
+#   REQUIREMENTS_TXT
+#       Space separated list of paths to requirements.txt files.
+#       Paths are resolved relative to current working directory.
+#       Default: requirements.txt
+#   WORKDIR
+#       Parent directory for the virtual environment.
+#       Default: current working directory.
+#   VENVDIR
+#   	Python virtual environment directory.
+#   	Default: $(WORKDIR)/.venv
+
 OS = $(shell uname)
 
 
@@ -26,6 +41,15 @@ VENV_DIR?=.venv
 PYTHON=${VENV_DIR}/bin/python
 VENV_ACTIVATE=. $(VENV_DIR)/bin/activate
 
+PY?=python3
+WORKDIR?=.
+VENVDIR?=$(WORKDIR)/.venv
+REQUIREMENTS_TXT?=$(wildcard requirements.txt)  # Multiple paths are supported (space separated)
+
+
+#
+# Pyenv staff
+#
 
 ifeq ($(OS),Darwin)
 	PYENV = \
@@ -58,36 +82,76 @@ help:
 	@echo "Please choose one of the following targets:"
 	@echo
 	@echo "    prerequisites: Installs prerequisites software"
-	@echo "    pyenv: Sets up pyenv and a virtualenv for this project"
+	@echo "    venv: Sets up pyenv and a virtualenv for this project"
 	@echo "    dependencies: Installs dependencies for this project"
 	@echo "    setup: Setup your development environment and install dependencies"
 	@echo "    test: Install test dependencies"
 	@echo "    clean: Cleans any generated files"
 	@echo
 
+#
+# Virtual environment
+#
 
-pyenv:
+.PHONY: venv
+venv:
 	@echo "Creating virtual env, python version is: ${PYTHON_VERSION}"
-
 	$(PYENV) install --skip-existing ${PYTHON_VERSION}
 
 	@eval "$$(pyenv init -)"; \
 	pyenv local ${PYTHON_VERSION}; \
-	python3 -m venv --prompt ${VENV_PROMT} ${VENV_DIR}
+	$(PY) -m venv --prompt ${VENV_PROMT} ${VENV_DIR}
 
-	$(PYTHON) -m pip install --upgrade pip
+	$(PYTHON) -m pip install --upgrade pip setuptools wheel
 
+.PHONY: debug-venv
+debug-venv:
+	@$(MAKE) --version
+	$(info PY="$(PY)")
+	$(info REQUIREMENTS_TXT="$(REQUIREMENTS_TXT)")
+	$(info VENVDIR="$(VENVDIR)")
+	$(info VENVDEPENDS="$(VENVDEPENDS)")
+	$(info WORKDIR="$(WORKDIR)")
+
+.PHONY: test-venv
+test-venv:
+	$(PYTHON) -c "import platform; assert platform.python_version() == \"${PYTHON_VERSION}\""
+
+.PHONY: clean-venv
+clean-venv:
+	-$(RM) -r "$(VENVDIR)"
+
+#
+# Dependencies
+#
+
+ifneq ($(strip $(REQUIREMENTS_TXT)),)
+VENVDEPENDS+=$(REQUIREMENTS_TXT)
+endif
+
+ifneq ($(wildcard setup.py),)
+VENVDEPENDS+=setup.py
+endif
+ifneq ($(wildcard setup.cfg),)
+VENVDEPENDS+=setup.cfg
+endif
+
+.PHONY: dependencies
 dependencies:
 	$(PYTHON) -m pip install -r requirements.txt
 
 
-setup: prerequisites pyenv dependencies
+.PHONY: setup
+setup: prerequisites venv dependencies
 
+
+.PHONY: test
 test:
 	@test ! -f "requirements-test.txt" || ($(PYTHON) -m pip install -r requirements-test.txt)
 
-clean:
-	@rm -rf ${VENV_DIR}
+
+.PHONY: clean
+clean: clean-venv
 	@rm -f .python-version
 	@rm -Rf *.egg .cache .coverage .tox build dist docs/build htmlcov
 	@find . -depth -type d -name __pycache__ -exec rm -Rf {} \;
