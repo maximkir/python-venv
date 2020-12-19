@@ -21,8 +21,7 @@ jobs:
         make setup
     - name: check python version
       run: |
-        source activate.sh
-        python -c "import platform; assert platform.python_version() == \"${PYTHON_VERSION}\""
+        make test-venv
     - name: check test target
       run: |
         make test
