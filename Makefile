@@ -35,6 +35,10 @@ else
 	PYENV = pyenv
 endif
 
+ifeq ($(OS),Linux)
+	export PYENV_ROOT=${HOME}/.pyenv
+	export PATH:=${PYENV_ROOT}/bin:${PATH}
+endif
 
 prerequisites: $(OS)
 
@@ -64,13 +68,10 @@ help:
 pyenv:
 	@echo "Creating virtual env, python version is: ${PYTHON_VERSION}"
 
-ifeq ($(OS),Linux)
-	export PYENV_ROOT="${HOME}/.pyenv"
-	export PATH="$${PYENV_ROOT}/bin:${PATH}"
-endif
 
+	env
 	$(PYENV) install --skip-existing ${PYTHON_VERSION}
-	
+
 	@eval "$$(pyenv init -)"; \
 	pyenv local ${PYTHON_VERSION}; \
 	python3 -m venv --prompt ${VENV_PROMT} ${VENV_DIR}
