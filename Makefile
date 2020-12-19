@@ -66,6 +66,7 @@ help:
 pyenv:
 	@echo "Creating virtual env, python version is: ${PYTHON_VERSION}"
 	echo "$${PYENV_ROOT}"
+	ls -l ~/.pyenv
 	$(PYENV) install --skip-existing ${PYTHON_VERSION}
 
 	@eval "$$(pyenv init -)"; \
