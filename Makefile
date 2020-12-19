@@ -1,4 +1,4 @@
-
+SHELL:=/bin/bash
 OS = $(shell uname)
 
 
@@ -23,6 +23,7 @@ endef
 PYTHON_VERSION?=3.6.8
 VENV_PROMT=$(basename "${PWD}")
 VENV_DIR?=.venv
+PYTHON=${VENV_DIR}/bin/python
 VENV_ACTIVATE=. $(VENV_DIR)/bin/activate
 
 
@@ -35,6 +36,10 @@ else
 	PYENV = pyenv
 endif
 
+ifeq ($(OS),Linux)
+	export PYENV_ROOT=${HOME}/.pyenv
+	export PATH:=${PYENV_ROOT}/bin:${PATH}
+endif
 
 prerequisites: $(OS)
 
@@ -43,6 +48,9 @@ Darwin:
 	$(call brew_install,openssl)
 	$(call brew_install_or_upgrade,pyenv)
 
+Linux:
+	# Clone a git repo if it does not exist, or pull into it if it does exist
+	git clone https://github.com/pyenv/pyenv.git ~/.pyenv 2> /dev/null || git -C ~/.pyenv pull
 
 .DEFAULT: help
 
@@ -60,23 +68,23 @@ help:
 
 pyenv:
 	@echo "Creating virtual env, python version is: ${PYTHON_VERSION}"
+
 	$(PYENV) install --skip-existing ${PYTHON_VERSION}
 
 	@eval "$$(pyenv init -)"; \
 	pyenv local ${PYTHON_VERSION}; \
 	python3 -m venv --prompt ${VENV_PROMT} ${VENV_DIR}
 
-	$(VENV_ACTIVATE); \
-	pip install --upgrade pip
+	$(PYTHON) -m pip install --upgrade pip
 
 dependencies:
-	$(VENV_ACTIVATE); pip install -r requirements.txt
+	$(PYTHON) -m pip install -r requirements.txt
 
 
 setup: prerequisites pyenv dependencies
 
 test:
-	@test ! -f "requirements-test.txt" || ($(VENV_ACTIVATE); pip install -r requirements-test.txt)
+	@test ! -f "requirements-test.txt" || ($(PYTHON) -m pip install -r requirements-test.txt)
 
 clean:
 	@rm -rf ${VENV_DIR}
