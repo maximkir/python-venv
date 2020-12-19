@@ -44,10 +44,11 @@ Darwin:
 	$(call brew_install_or_upgrade,pyenv)
 
 Linux:
+	PYENV_ROOT="${HOME}/.pyenv"
 	# Clone a git repo if it does not exist, or pull into it if it does exist
 	git clone https://github.com/pyenv/pyenv.git ~/.pyenv 2> /dev/null || git -C ~/.pyenv pull
 	@echo 'export PYENV_ROOT="${HOME}/.pyenv"' >> ~/.bash_profile
-	@echo 'export PATH="$${PYENV_ROOT}/bin:${PATH}"' >> ~/.bash_profile
+	@echo 'export PATH="${PYENV_ROOT}/bin:${PATH}"' >> ~/.bash_profile
 
 .DEFAULT: help
 
@@ -66,7 +67,7 @@ help:
 pyenv:
 	@echo "Creating virtual env, python version is: ${PYTHON_VERSION}"
 	@echo "$${PYENV_ROOT}"
-	ls -l ~/.pyenv
+
 	$(PYENV) install --skip-existing ${PYTHON_VERSION}
 
 	@eval "$$(pyenv init -)"; \
