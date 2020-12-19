@@ -23,6 +23,7 @@ endef
 PYTHON_VERSION?=3.6.8
 VENV_PROMT=$(basename "${PWD}")
 VENV_DIR?=.venv
+PYTHON=${VENV_DIR}/bin/python
 VENV_ACTIVATE=. $(VENV_DIR)/bin/activate
 
 
@@ -74,17 +75,16 @@ pyenv:
 	pyenv local ${PYTHON_VERSION}; \
 	python3 -m venv --prompt ${VENV_PROMT} ${VENV_DIR}
 
-	$(VENV_ACTIVATE); \
-	pip install --upgrade pip
+	$(PYTHON) -m pip install --upgrade pip
 
 dependencies:
-	$(VENV_ACTIVATE); pip install -r requirements.txt
+	$(PYTHON) -m pip install -r requirements.txt
 
 
 setup: prerequisites pyenv dependencies
 
 test:
-	@test ! -f "requirements-test.txt" || ($(VENV_ACTIVATE); pip install -r requirements-test.txt)
+	@test ! -f "requirements-test.txt" || ($(PYTHON) -m pip install -r requirements-test.txt)
 
 clean:
 	@rm -rf ${VENV_DIR}
