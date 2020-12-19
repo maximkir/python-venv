@@ -46,8 +46,6 @@ Darwin:
 Linux:
 	# Clone a git repo if it does not exist, or pull into it if it does exist
 	git clone https://github.com/pyenv/pyenv.git ~/.pyenv 2> /dev/null || git -C ~/.pyenv pull
-	echo 'export PYENV_ROOT="${HOME}/.pyenv"' >> ~/.bashrc
-	echo 'export PATH="$${PYENV_ROOT}/bin:${PATH}"' >> ~/.bashrc
 
 .DEFAULT: help
 
@@ -65,8 +63,14 @@ help:
 
 pyenv:
 	@echo "Creating virtual env, python version is: ${PYTHON_VERSION}"
-	$(PYENV) install --skip-existing ${PYTHON_VERSION}
 
+ifeq ($(OS),Linux)
+	export PYENV_ROOT="${HOME}/.pyenv"
+	export PATH="$${PYENV_ROOT}/bin:${PATH}"
+endif
+
+	$(PYENV) install --skip-existing ${PYTHON_VERSION}
+	
 	@eval "$$(pyenv init -)"; \
 	pyenv local ${PYTHON_VERSION}; \
 	python3 -m venv --prompt ${VENV_PROMT} ${VENV_DIR}
