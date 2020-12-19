@@ -43,13 +43,14 @@ Darwin:
 	$(call brew_install,openssl)
 	$(call brew_install_or_upgrade,pyenv)
 
-Linux: 
-	git clone https://github.com/pyenv/pyenv.git ~/.pyenv
-	echo 'export PYENV_ROOT="$HOME/.pyenv"' >> ~/.bash_profile
-	echo 'export PATH="$PYENV_ROOT/bin:$PATH"' >> ~/.bash_profile
-	exec "$$SHELL"
+Linux:
+	# Clone a git repo if it does not exist, or pull into it if it does exist
+	git clone https://github.com/pyenv/pyenv.git ~/.pyenv 2> /dev/null || git -C ~/.pyenv pull
+	echo 'export PYENV_ROOT="${HOME}/.pyenv"' >> ~/.bash_profile
+	echo 'export PATH="${PYENV_ROOT}/bin:${PATH}"' >> ~/.bash_profile
+	exec "${SHELL}"
 	. ~/.bash_profile
-	echo -e 'if command -v pyenv 1>/dev/null 2>&1; then\n  eval "$(pyenv init -)"\nfi' >> ~/.bash_profile
+	echo -e 'if command -v pyenv 1>/dev/null 2>&1; then\n  eval "$$(pyenv init -)"\nfi' >> ~/.bash_profile
 
 .DEFAULT: help
 
