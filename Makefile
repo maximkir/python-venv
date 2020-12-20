@@ -37,13 +37,12 @@ endef
 
 PYTHON_VERSION?=3.6.8
 VENV_PROMT=$(basename "${PWD}")
-VENV_DIR?=.venv
-PYTHON=${VENV_DIR}/bin/python
-VENV_ACTIVATE=. $(VENV_DIR)/bin/activate
 
 PY?=python3
 WORKDIR?=.
 VENVDIR?=$(WORKDIR)/.venv
+VENV=$(VENVDIR)/bin
+PYTHON=${VENV}/python
 REQUIREMENTS_TXT?=$(wildcard requirements.txt)  # Multiple paths are supported (space separated)
 
 
@@ -100,7 +99,7 @@ venv:
 
 	@eval "$$(pyenv init -)"; \
 	$(PYENV) local ${PYTHON_VERSION}; \
-	$(PY) -m venv --prompt ${VENV_PROMT} ${VENV_DIR}
+	$(PY) -m venv --prompt ${VENV_PROMT} ${VENVDIR}
 
 	$(PYTHON) -m pip install --upgrade pip setuptools wheel
 
