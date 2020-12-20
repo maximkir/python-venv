@@ -2,6 +2,9 @@ name: CI
 
 on:
   push:
+    paths-ignore:
+      - '**.md'
+      - '.git*'
     branches: [ master ]
   pull_request:
     branches: [ master ]
