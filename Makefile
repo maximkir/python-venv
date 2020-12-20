@@ -99,7 +99,7 @@ venv:
 	$(PYENV) install --skip-existing ${PYTHON_VERSION}
 
 	@eval "$$(pyenv init -)"; \
-	pyenv local ${PYTHON_VERSION}; \
+	$(PYENV) local ${PYTHON_VERSION}; \
 	$(PY) -m venv --prompt ${VENV_PROMT} ${VENV_DIR}
 
 	$(PYTHON) -m pip install --upgrade pip setuptools wheel
