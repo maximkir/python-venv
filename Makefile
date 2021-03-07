@@ -155,3 +155,15 @@ clean: clean-venv
 	@rm -Rf *.egg .cache .coverage .tox build dist docs/build htmlcov
 	@find . -depth -type d -name __pycache__ -exec rm -Rf {} \;
 	@find . -type f -name '*.pyc' -delete
+
+#
+# Interactive shells
+#
+
+.PHONY: python
+python: venv
+	exec $(VENV)/python
+
+.PHONY: bash zsh
+bash zsh: venv
+	. $(VENV)/activate && exec $@
