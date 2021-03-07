@@ -44,6 +44,7 @@ VENVDIR?=$(WORKDIR)/.venv
 VENV=$(VENVDIR)/bin
 PYTHON=${VENV}/python
 REQUIREMENTS_TXT?=$(wildcard requirements.txt)  # Multiple paths are supported (space separated)
+MARKER=.initialized-with-Makefile.venv
 
 
 #
@@ -93,15 +94,7 @@ help:
 #
 
 .PHONY: venv
-venv:
-	@echo "Creating virtual env, python version is: ${PYTHON_VERSION}"
-	$(PYENV) install --skip-existing ${PYTHON_VERSION}
-
-	@eval "$$(pyenv init -)"; \
-	$(PYENV) local ${PYTHON_VERSION}; \
-	$(PY) -m venv --prompt ${VENV_PROMT} ${VENVDIR}
-
-	$(PYTHON) -m pip install --upgrade pip setuptools wheel
+venv: $(VENV)/$(MARKER)
 
 .PHONY: debug-venv
 debug-venv:
@@ -135,17 +128,29 @@ ifneq ($(wildcard setup.cfg),)
 VENVDEPENDS+=setup.cfg
 endif
 
-.PHONY: dependencies
-dependencies:
-	$(PYTHON) -m pip install -r requirements.txt
+$(VENV):
+	@echo "Creating virtual env, python version is: ${PYTHON_VERSION}"
+	$(PYENV) install --skip-existing ${PYTHON_VERSION}
+
+	@eval "$$(pyenv init -)"; \
+	$(PYENV) local ${PYTHON_VERSION}; \
+	$(PY) -m venv --prompt ${VENV_PROMT} ${VENVDIR}
+	
+	$(PYTHON) -m pip install --upgrade pip setuptools wheel
 
 
-.PHONY: setup
-setup: prerequisites venv dependencies
+$(VENV)/$(MARKER): $(VENVDEPENDS) | $(VENV)
+ifneq ($(strip $(REQUIREMENTS_TXT)),)
+	$(VENV)/pip install $(foreach path,$(REQUIREMENTS_TXT),-r $(path))
+endif
+ifneq ($(wildcard setup.py),)
+	$(VENV)/pip install -e .
+endif
+	touch $(VENV)/$(MARKER)
 
 
 .PHONY: test
-test:
+test: venv
 	@test ! -f "requirements-test.txt" || ($(PYTHON) -m pip install -r requirements-test.txt)
 
 
