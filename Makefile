@@ -128,6 +128,11 @@ ifneq ($(wildcard setup.cfg),)
 VENVDEPENDS+=setup.cfg
 endif
 
+
+.PHONY: setup
+setup: prerequisites venv 
+
+
 $(VENV):
 	@echo "Creating virtual env, python version is: ${PYTHON_VERSION}"
 	$(PYENV) install --skip-existing ${PYTHON_VERSION}
@@ -135,7 +140,7 @@ $(VENV):
 	@eval "$$(pyenv init -)"; \
 	$(PYENV) local ${PYTHON_VERSION}; \
 	$(PY) -m venv --prompt ${VENV_PROMT} ${VENVDIR}
-	
+
 	$(PYTHON) -m pip install --upgrade pip setuptools wheel
 
 
