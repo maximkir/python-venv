@@ -144,6 +144,7 @@ $(VENV):
 	$(PYTHON) -m pip install --upgrade pip setuptools wheel
 
 
+# TODO: Add support for file content changes
 $(VENV)/$(MARKER): $(VENVDEPENDS) | $(VENV)
 ifneq ($(strip $(REQUIREMENTS_TXT)),)
 	$(VENV)/pip install $(foreach path,$(REQUIREMENTS_TXT),-r $(path))
