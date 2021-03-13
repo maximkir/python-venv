@@ -96,6 +96,12 @@ help:
 .PHONY: venv
 venv: $(VENV)/$(MARKER)
 
+.PHONY: show-venv
+show-venv: venv
+	@$(VENV)/python -c "import sys; print('Python ' + sys.version.replace('\n',''))"
+	@$(VENV)/pip --version
+	@echo venv: $(VENVDIR)
+
 .PHONY: debug-venv
 debug-venv:
 	@$(MAKE) --version
