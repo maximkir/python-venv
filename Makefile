@@ -36,6 +36,7 @@ endef
 .PHONY: help dependencies pyenv setup clean
 
 PYTHON_VERSION?=3.6.8
+PIP_VERSION?=20.2.4
 VENV_PROMT=$(basename "${PWD}")
 
 PY?=python3
@@ -147,7 +148,8 @@ $(VENV):
 	$(PYENV) local ${PYTHON_VERSION}; \
 	$(PY) -m venv --prompt ${VENV_PROMT} ${VENVDIR}
 
-	$(PYTHON) -m pip install --upgrade pip setuptools wheel
+	$(PYTHON) -m pip install pip==${PIP_VERSION}
+	$(PYTHON) -m pip install --upgrade setuptools wheel
 
 
 # TODO: Add support for file content changes
