@@ -20,11 +20,14 @@ jobs:
     steps:
     - uses: actions/checkout@v2
     - name: Run Tests
+      working-directory: ./tests
       run: |
-        make test
+        make -f Makefile.test test
     - name: Check Black Formatting
+      working-directory: ./tests
       run: |
-        make black
+        make -f Makefile.test black
     - name: Check clean target
+      working-directory: ./tests
       run: |
-        make clean
+        make -f Makefile.test clean
