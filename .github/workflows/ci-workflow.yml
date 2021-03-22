@@ -19,6 +19,10 @@ jobs:
       PYTHON_VERSION: 3.6.11
     steps:
     - uses: actions/checkout@v2
+    - name: Setup
+      working-directory: ./tests
+      run: |
+        make -f Makefile.test setup
     - name: Run Tests
       working-directory: ./tests
       run: |
