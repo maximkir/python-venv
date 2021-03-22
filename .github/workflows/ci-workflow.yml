@@ -19,17 +19,12 @@ jobs:
       PYTHON_VERSION: 3.6.11
     steps:
     - uses: actions/checkout@v2
-    - name: setup virtual environment
-      run: |
-        make setup
-    - name: check python version
-      run: |
-        make test-venv
-    - name: check test target
+    - name: Run Tests
       run: |
         make test
-        source activate.sh
-        pytest --version
-    - name: check clean target
+    - name: Check Black Formatting
+      run: |
+        make black
+    - name: Check clean target
       run: |
         make clean

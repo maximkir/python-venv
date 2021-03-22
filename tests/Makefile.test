@@ -1,0 +1,11 @@
+
+include ../Makefile
+
+export PYTHON_VERSION
+
+.PHONY: test
+test: venv
+	$(PYTHON) -m pytest
+
+black: venv
+	$(PYTHON) -m black --check .

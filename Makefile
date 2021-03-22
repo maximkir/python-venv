@@ -33,8 +33,6 @@ define brew_install_or_upgrade
 endef
 
 
-.PHONY: help dependencies pyenv setup clean
-
 PYTHON_VERSION?=3.6.8
 PIP_VERSION?=20.2.4
 VENV_PROMT=$(basename "${PWD}")
@@ -77,18 +75,6 @@ Linux:
 	# Clone a git repo if it does not exist, or pull into it if it does exist
 	git clone https://github.com/pyenv/pyenv.git ~/.pyenv 2> /dev/null || git -C ~/.pyenv pull
 
-.DEFAULT: help
-
-help:
-	@echo "Please choose one of the following targets:"
-	@echo
-	@echo "    prerequisites: Installs prerequisites software"
-	@echo "    venv: Sets up pyenv and a virtualenv for this project"
-	@echo "    dependencies: Installs dependencies for this project"
-	@echo "    setup: Setup your development environment and install dependencies"
-	@echo "    test: Install test dependencies"
-	@echo "    clean: Cleans any generated files"
-	@echo
 
 #
 # Virtual environment
@@ -112,9 +98,6 @@ debug-venv:
 	$(info VENVDEPENDS="$(VENVDEPENDS)")
 	$(info WORKDIR="$(WORKDIR)")
 
-.PHONY: test-venv
-test-venv:
-	$(PYTHON) -c "import platform; assert platform.python_version() == \"${PYTHON_VERSION}\""
 
 .PHONY: clean-venv
 clean-venv:
@@ -161,11 +144,6 @@ ifneq ($(wildcard setup.py),)
 	$(VENV)/pip install -e .
 endif
 	touch $(VENV)/$(MARKER)
-
-
-.PHONY: test
-test: venv
-	@test ! -f "requirements-test.txt" || ($(PYTHON) -m pip install -r requirements-test.txt)
 
 
 .PHONY: clean
