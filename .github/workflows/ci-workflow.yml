@@ -31,7 +31,7 @@ jobs:
       working-directory: ./tests
       run: |
         make -f Makefile.test black
-    - name: Check clean target
+    - name: Clean
       working-directory: ./tests
       run: |
         make -f Makefile.test clean

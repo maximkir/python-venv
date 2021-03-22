@@ -1,7 +1,7 @@
 
 include ../Makefile
 
-export PYTHON_VERSION
+export PYTHON_VERSION PIP_VERSION
 
 .PHONY: test
 test: venv
