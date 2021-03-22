@@ -1,2 +1,0 @@
-# Add test requirements here
-pytest==6.0.1
