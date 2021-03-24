@@ -27,13 +27,20 @@ Alternatively, you can add installation actions as the Makefile rule:
 > to shell](https://0x46.net/thoughts/2019/04/27/piping-curl-to-shell/)!
 
 ```make
+
+SHASUM = sha256sum # Linux GNU
+
+ifeq ($(OS), Darwin)
+	SHASUM = shasum --algorithm 256
+endif
+
 include Makefile.venv
 Makefile.venv:
 	curl \
 		-o Makefile.fetched \
 		-L "https://raw.githubusercontent.com/maximkir/python-venv/v2020.12.20/Makefile.venv"
 	echo "1c79f371eda3c40441efaf59ecb830bd8c6b6f31ae0cac3f772626dcc498ac06 *Makefile.fetched" \
-		| sha256sum --check - \
+		| $(SHASUM) --check - \
 		&& mv Makefile.fetched Makefile.venv
 ```
 
