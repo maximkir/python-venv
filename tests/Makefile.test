@@ -1,5 +1,5 @@
 
-include ../Makefile
+include ../Makefile.venv
 
 export PYTHON_VERSION PIP_VERSION
 
