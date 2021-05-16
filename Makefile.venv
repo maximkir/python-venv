@@ -33,6 +33,7 @@ define brew_install_or_upgrade
 endef
 
 
+PYENV_VERSION?=1.2.26
 PYTHON_VERSION?=3.6.8
 PIP_VERSION?=20.2.4
 VENV_PROMT=$(basename "${PWD}")
@@ -74,6 +75,7 @@ Darwin:
 Linux:
 	# Clone a git repo if it does not exist, or pull into it if it does exist
 	git clone https://github.com/pyenv/pyenv.git ~/.pyenv 2> /dev/null || git -C ~/.pyenv pull
+	git checkout tags/${PYENV_VERSION}
 
 
 #
