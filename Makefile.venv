@@ -75,7 +75,7 @@ Darwin:
 Linux:
 	# Clone a git repo if it does not exist, or pull into it if it does exist
 	git clone --depth 1 --branch ${PYENV_VERSION} https://github.com/pyenv/pyenv.git ~/.pyenv 2> /dev/null || \
-	git -C ~/.pyenv pull
+	git -C ~/.pyenv checkout tags/${PYENV_VERSION}
 
 
 #
