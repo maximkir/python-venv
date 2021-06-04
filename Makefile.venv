@@ -129,7 +129,8 @@ $(VENV):
 	@echo "Creating virtual env, python version is: ${PYTHON_VERSION}"
 	$(PYENV) install --skip-existing ${PYTHON_VERSION}
 
-	@eval "$$(pyenv init --path); $$(pyenv init -)"; \
+	@eval "$$(pyenv init --path)"; \
+	@eval "$$(pyenv init -)"; \
 	$(PYENV) local ${PYTHON_VERSION}; \
 	$(PY) -m venv --prompt ${VENV_PROMT} ${VENVDIR}
 
