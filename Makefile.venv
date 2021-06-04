@@ -60,10 +60,10 @@ else
 	PYENV = pyenv
 endif
 
-ifeq ($(OS),Linux)
-	export PYENV_ROOT=${HOME}/.pyenv
-	export PATH:=${PYENV_ROOT}/bin:${PATH}
-endif
+# Add pyenv executable to PATH and enable shims
+export PYENV_ROOT=${HOME}/.pyenv
+export PATH:=${PYENV_ROOT}/bin:${PATH}
+
 
 prerequisites: $(OS)
 
@@ -129,6 +129,7 @@ $(VENV):
 	@echo "Creating virtual env, python version is: ${PYTHON_VERSION}"
 	$(PYENV) install --skip-existing ${PYTHON_VERSION}
 
+	@eval "$$(pyenv init --path)"; \
 	@eval "$$(pyenv init -)"; \
 	$(PYENV) local ${PYTHON_VERSION}; \
 	$(PY) -m venv --prompt ${VENV_PROMT} ${VENVDIR}
